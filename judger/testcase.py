@@ -19,11 +19,12 @@ def list_testcases(config):
     files = list_files_recursively(path)
     input_list = list_matched_files(files, input_format_re)
     expect_list = list_matched_files(files, expect_format_re)
-    combinations = itertools.product(input_list, expect_list)
+    input_list.sort(key=lambda x: x.index)
+    expect_list.sort(key=lambda x: x.index)
 
     id_format_re = '(' + variable.solve_string(config, input_format) + ')'
     id = re.compile(id_format_re)
-    return [(input.name, expect.name, id.findall(input.name)[0]) for input, expect in combinations if input.index == expect.index]
+    return [(input.name, expect.name, id.findall(input.name)[0]) for input, expect in zip(input_list, expect_list)]
 
 def list_files_recursively(path):
     result = []
