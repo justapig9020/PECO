@@ -22,10 +22,10 @@ def execute_commands(config, field, logger = default_logger, is_success = withou
         try:
             result = subprocess.run(command, shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout)
         except subprocess.TimeoutExpired:
-            log.append(logger("Timeout"))
+            log.append({command: logger("Timeout")})
             return (log, False)
 
-        log.append(logger(result))
+        log.append({command: logger(result)})
         if not is_success(result):
             return (log, False)
     return (log, True)
