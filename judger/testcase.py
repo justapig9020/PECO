@@ -17,11 +17,13 @@ def list_testcases(config):
     expect_format_re = variable.solve_string(config, expect_format, prefix='(', postfix=')')
 
     files = list_files_recursively(path)
-
     input_list = list_matched_files(files, input_format_re)
     expect_list = list_matched_files(files, expect_format_re)
     combinations = itertools.product(input_list, expect_list)
-    return [(input.name, expect.name) for input, expect in combinations if input.index == expect.index]
+
+    id_format_re = '(' + variable.solve_string(config, input_format) + ')'
+    id = re.compile(id_format_re)
+    return [(input.name, expect.name, id.findall(input.name)[0]) for input, expect in combinations if input.index == expect.index]
 
 def list_files_recursively(path):
     result = []
