@@ -15,7 +15,7 @@ def execute_commands(config, field, logger = default_logger, is_success = withou
     timeout = config[field]['timeout'] if 'timeout' in config[field] else None
     log = []
     for command in commands:
-        command = variable.solve_string(command, config)
+        command = variable.solve_string(config, command)
         command = command.split(' ')
         result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout)
         log.append(logger(result))

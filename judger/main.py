@@ -1,5 +1,6 @@
 import argparse
 import yaml
+import test_case
 from execute import execute_commands
 import os
 import shutil
@@ -30,7 +31,12 @@ if __name__ == '__main__':
     config['root'] = os.getcwd()
 
     setup_env(config)
+
+    # Compile
     (log, result) = execute_commands(config, 'compile')
-    print(log)
-    print(result)
+
+    # List test cases
+    test_cases = test_case.list_test_cases(config)
+    print(test_cases)
+    
     resolve_env(config)

@@ -1,18 +1,19 @@
 import re
 
 def with_variable(string):
-    return extract_variable(string) != []
+    return extract_variables(string) != []
 
-def extract_variable(string):
+def extract_variables(string):
     var_format = "<([a-zA-Z0-9_:]*)>"
     return re.findall(var_format, string)
 
-def solve_string(string, config):
-    vars = extract_variable(string)
+def solve_string(config, string, prefix = '', postfix = ''):
+    vars = extract_variables(string)
     for var in vars:
         value = get_variable(config, var)
         if with_variable(value):
-            value = solve_string(value, config)
+            value = solve_string(config, value, prefix, postfix)
+        value = prefix + value + postfix
         string = solve_variable(string, var, value)
     return string
 
