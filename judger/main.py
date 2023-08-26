@@ -37,6 +37,18 @@ if __name__ == '__main__':
 
     # List test cases
     test_cases = test_case.list_test_cases(config)
-    print(test_cases)
+
+    # Judge
+    for input, expect in test_cases:
+        print(input)
+        print(expect)
+        config['input'] = input
+        config['expect'] = expect
+        (log, result) = execute_commands(config, 'execute')
+        if not result:
+            print(log[-1])
+            continue
+        (log, result) = execute_commands(config, 'judge')
+        print(result)
     
     resolve_env(config)

@@ -25,5 +25,6 @@ def list_matched_files(path, format):
     files = os.listdir(path)
     # filter the files
     format = re.compile(format)
+    files = [path + '/' + file for file in files]
     indexed_files = [(file, format.findall(file)) for file in files]
     return [IndexedFile(index, file) for file, index in indexed_files if index != []]
