@@ -8,7 +8,10 @@ def without_fail(result):
     return result.returncode == 0
 
 def default_logger(result):
-    return {'stdout': result.stdout, 'stderr': result.stderr}
+    if isinstance(result, str):
+        return result
+    else:
+        return {'stdout': result.stdout, 'stderr': result.stderr}
 
 def execute_commands(config, field, logger = default_logger, is_success = without_fail):
     commands = config[field]['commands']
@@ -16,7 +19,12 @@ def execute_commands(config, field, logger = default_logger, is_success = withou
     log = []
     for command in commands:
         command = variable.solve_string(config, command)
-        result = subprocess.run(command, shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout)
+        try:
+            result = subprocess.run(command, shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout)
+        except subprocess.TimeoutExpired:
+            log.append(logger("Timeout"))
+            return (log, False)
+
         log.append(logger(result))
         if not is_success(result):
             return (log, False)
