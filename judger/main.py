@@ -1,6 +1,6 @@
 import argparse
 import yaml
-import test_case
+import testcase
 from execute import execute_commands
 import os
 import shutil
@@ -28,9 +28,7 @@ if __name__ == '__main__':
     with open(args.config, 'r') as f:
         config = yaml.safe_load(f)
 
-    config['root'] = os.getcwd()
-
-    required_fields = ['execute', 'judge', 'test_cases']
+    required_fields = ['execute', 'judge', 'testcases']
     for field in required_fields:
         if field not in config:
             raise Exception(f'Field {field} is required in the config file')
@@ -40,6 +38,8 @@ if __name__ == '__main__':
         if field in config:
             raise Exception(f'Field {field} is reserved')
 
+    config['root'] = os.getcwd()
+
     setup_env(config)
 
     # Compile
@@ -47,7 +47,7 @@ if __name__ == '__main__':
         (log, result) = execute_commands(config, 'compile')
 
     # List test cases
-    test_cases = test_case.list_test_cases(config)
+    test_cases = testcase.list_testcases(config)
 
     # Judge
     for input, expect in test_cases:

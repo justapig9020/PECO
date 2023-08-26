@@ -14,11 +14,11 @@ build:
 
 # Test case config
 # The judger will find all test cases in the directory
-test_cases:
-  path: test_cases
+testcases:
+  path: testcases
   format:
-    input: input_<test_cases::format::index>.txt
-    expect: output_<test_cases::format::index>.txt
+    input: input_<testcases::format::index>.txt
+    expect: output_<testcases::format::index>.txt
     index: "[0-9]+"
 
 # Compile config

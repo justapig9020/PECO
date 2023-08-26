@@ -8,23 +8,32 @@ class IndexedFile:
         self.index = index
         self.name = name
 
-def list_test_cases(config):
-    path = config['root'] + '/' + variable.solve_string(config, config['test_cases']['path'])
-    input_format = config['test_cases']['format']['input']
-    expect_format = config['test_cases']['format']['expect']
+
+def list_testcases(config):
+    path = config['root'] + '/' + variable.solve_string(config, config['testcases']['path'])
+    input_format = config['testcases']['format']['input']
+    expect_format = config['testcases']['format']['expect']
     input_format_re = variable.solve_string(config, input_format, prefix='(', postfix=')')
     expect_format_re = variable.solve_string(config, expect_format, prefix='(', postfix=')')
-    input_list = list_matched_files(path, input_format_re)
-    expect_list = list_matched_files(path, expect_format_re)
+
+    files = list_files_recursively(path)
+
+    input_list = list_matched_files(files, input_format_re)
+    expect_list = list_matched_files(files, expect_format_re)
     combinations = itertools.product(input_list, expect_list)
     return [(input.name, expect.name) for input, expect in combinations if input.index == expect.index]
 
+def list_files_recursively(path):
+    result = []
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            file_path = os.path.join(root, file)
+            result.append(file_path)
+    return result
 
-def list_matched_files(path, format):
-    # list all files in the path
-    files = os.listdir(path)
+def list_matched_files(files, format):
     # filter the files
     format = re.compile(format)
-    files = [path + '/' + file for file in files]
+    files = [file for file in files]
     indexed_files = [(file, format.findall(file)) for file in files]
     return [IndexedFile(index, file) for file, index in indexed_files if index != []]
