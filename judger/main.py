@@ -30,10 +30,21 @@ if __name__ == '__main__':
 
     config['root'] = os.getcwd()
 
+    required_fields = ['execute', 'judge', 'test_cases']
+    for field in required_fields:
+        if field not in config:
+            raise Exception(f'Field {field} is required in the config file')
+
+    reserved_fields = ['root', 'input', 'expect']
+    for field in reserved_fields:
+        if field in config:
+            raise Exception(f'Field {field} is reserved')
+
     setup_env(config)
 
     # Compile
-    (log, result) = execute_commands(config, 'compile')
+    if 'compile' in config:
+        (log, result) = execute_commands(config, 'compile')
 
     # List test cases
     test_cases = test_case.list_test_cases(config)
