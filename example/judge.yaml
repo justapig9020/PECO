@@ -1,13 +1,16 @@
 # Directory of source code
-source: code/src
+source:
+  path: code/src
 
 # Directory of supplied code
-supplied: code/supplied
+supplied:
+  path: code/supplied
 
 # Directory of built code
 # The directory will be created if it does not exist
 # Before judging, the judger will clean the directory
-build: build
+build:
+  path: build
 
 # Test case config
 # The judger will find all test cases in the directory
@@ -24,8 +27,8 @@ test_cases:
 compile:
   timeout: 60
   commands:
-    - gcc -o main.o -c <source>/main.c -I<supplied>
-    - gcc -o func.o -c <supplied>/func.c
+    - gcc -o main.o -c <source::path>/main.c -I<supplied::path>
+    - gcc -o func.o -c <supplied::path>/func.c
     - gcc -o main main.o func.o
 
 # Execute config
