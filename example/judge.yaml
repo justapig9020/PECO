@@ -31,20 +31,11 @@ compile:
     - gcc -o func.o -c <supplied::path>/func.c
     - gcc -o main main.o func.o
 
-# Execute config
-# For each test case, the judger does execution before judging
-# If the execution fails, the test case fails
-execute:
-  timeout: 60
-  commands:
-    - cp <input> test_case
-    - cp <expect> expect
-    - cat test_case | ./main | tee output
-
 # Judge config
 # For each test case, the judger does judging after execution0
 # If the judging fails, the test case fails
 judge:
   timeout: 60
   commands:
-    - diff output expect
+    - cat <input> | ./main | tee output
+    - diff output <expect>

@@ -28,7 +28,7 @@ if __name__ == '__main__':
     with open(args.config, 'r') as f:
         config = yaml.safe_load(f)
 
-    required_fields = ['execute', 'judge', 'testcases']
+    required_fields = ['judge', 'testcases']
     for field in required_fields:
         if field not in config:
             raise Exception(f'Field {field} is required in the config file')
@@ -55,10 +55,6 @@ if __name__ == '__main__':
         print(expect)
         config['input'] = input
         config['expect'] = expect
-        (log, result) = execute_commands(config, 'execute')
-        if not result:
-            print(log[-1])
-            continue
         (log, result) = execute_commands(config, 'judge')
         print(result)
     
