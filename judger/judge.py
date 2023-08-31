@@ -71,8 +71,8 @@ def judge(config_file):
     config = setup_config(config_file)
     origin_env = setup_env(config)
 
-    result = run(config)
+    results = run(config)
 
     resolve_env(origin_env)
 
-    return result
+    return results

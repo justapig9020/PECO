@@ -16,11 +16,11 @@ class Test(unittest.TestCase):
     def test_all_pass(self):
         pwd = os.getcwd()
 
-        report = judge('all_pass/judge.yaml')
-        self.assertEqual(len(report), 5)
+        results = judge('all_pass/judge.yaml')
+        self.assertEqual(len(results), 5)
         # Traverse the value of report
         # Assert that all values are None
-        for result in report.values():
+        for result in results.values():
             self.assertEqual(result, None, result)
 
         self.assertEqual(os.getcwd(), pwd)
@@ -28,11 +28,11 @@ class Test(unittest.TestCase):
     def test_with_fail(self):
         pwd = os.getcwd()
 
-        report = judge('with_fail/judge.yaml')
-        self.assertEqual(len(report), 5)
+        results = judge('with_fail/judge.yaml')
+        self.assertEqual(len(results), 5)
         # Traverse the value of report
         # Assert that all values are None except the "input_5"
-        for testcase, result in report.items():
+        for testcase, result in results.items():
             if 'input_5' in testcase:
                 self.assertNotEqual(result, None, result)
             else:

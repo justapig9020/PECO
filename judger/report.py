@@ -1,6 +1,12 @@
 from termcolor import colored
 
-def report(results):
+def shader(text, color, colorize):
+    if colorize:
+        return colored(text, color)
+    else:
+        return text
+
+def report(results, colorize=True):
     # The function returns the report as a string
     # The result is a dict, the key is the name of the test case, the value is the result of the test case
     # If the value is None, it means the test case passed
@@ -17,9 +23,9 @@ def report(results):
     report = ''
     for testcase, result in results.items():
         if result is None:
-            report += f'{testcase}: {colored("Passed", "green")}\n'
+            report += f'{testcase}: {shader("Passed", "green", colorize)}\n'
         else:
-            report += f'{testcase}: {colored("Failed", "red")}\n'
+            report += f'{testcase}: {shader("Failed", "red", colorize)}\n'
             for log in result:
                 for command, outcome in log.items():
                     report += '-' * len(command) + '\n'
