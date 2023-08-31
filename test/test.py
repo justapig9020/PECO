@@ -41,13 +41,9 @@ class Test(unittest.TestCase):
         self.assertEqual(os.getcwd(), pwd)
 
     def test_compile_error(self):
-        pwd = os.getcwd()
-
-        report = judge('compile_error/judge.yaml')
-        self.assertEqual(len(report), 1)
-        self.assertTrue('Compile Error' in report)
-
-        self.assertEqual(os.getcwd(), pwd)
+        from judge import CompileError
+        with self.assertRaises(CompileError):
+            judge('compile_error/judge.yaml')
 
     def test_missing_input(self):
         from testcase import InputMiss
