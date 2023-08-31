@@ -1,5 +1,11 @@
 from termcolor import colored
 
+# Colors
+PASSED = "green"
+FAILED = "red"
+COMMAND = "cyan"
+OUTCOME = "magenta"
+
 def shader(text, color, colorize):
     if colorize:
         return colored(text, color)
@@ -23,19 +29,24 @@ def report(results, colorize=True):
     report = ''
     for testcase, result in results.items():
         if result is None:
-            report += f'{testcase}: {shader("Passed", "green", colorize)}\n'
+            report += f'{testcase}: {shader("Passed", PASSED, colorize)}\n'
         else:
-            report += f'{testcase}: {shader("Failed", "red", colorize)}\n'
+            report += f'{testcase}: {shader("Failed", FAILED, colorize)}\n'
+            length = max([len(command) for log in result for command in log.keys()]) + 2
             for log in result:
                 for command, outcome in log.items():
-                    report += '-' * len(command) + '\n'
-                    report += f'{command}: \n'
+                    report += '-' * length + '\n'
+                    report += f'{shader(command, COMMAND, colorize)}: \n'
                     if outcome['stdout'] != b'':
-                        report += f'stdout:\n'
+                        report += f'{shader("stdout:", OUTCOME, colorize)}\n'
                         report += f'{outcome["stdout"].decode()}\n'
                         report += '\n'
                     if outcome["stderr"] != b'':
-                        report += f'stderr:\n'
+                        report += f'{shader("stderr:", OUTCOME, colorize)}\n'
                         report += f'{outcome["stderr"].decode()}\n'
                         report += '\n'
+            report += '=' * length + '\n\n'
+    # Conclude the report with a summary (Failed / Total)
+    failed = len([result for result in results.values() if result is not None])
+    report += f'\nRan {len(results)} test cases, {failed} failed\n'
     return report
