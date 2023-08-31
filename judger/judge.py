@@ -5,6 +5,10 @@ import os
 from os import path
 import shutil
 
+class CompileError(Exception):
+    def __init__(self, log):
+        super().__init__(f'{log}')
+
 def setup_env(config):
     current_env = {
         'pwd': os.getcwd(),
@@ -39,7 +43,7 @@ def run(config):
     if 'compile' in config:
         (log, result) = execute_commands(config, 'compile')
         if not result:
-            return {'Compile Error': log}
+            raise CompileError(log)
 
     # List test cases
     test_cases = testcase.list_testcases(config)
@@ -67,7 +71,7 @@ def judge(config_file):
     config = setup_config(config_file)
     origin_env = setup_env(config)
 
-    result = run(config)   
+    result = run(config)
 
     resolve_env(origin_env)
 
