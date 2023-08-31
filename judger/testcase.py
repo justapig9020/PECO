@@ -31,7 +31,7 @@ def build_testcases(input_list, expect_list):
         # pick one of the expect file
         input_miss = list(expect_hash.values())[0]
         raise InputMiss(input_miss.name)
-    
+
     return testcases
 
 def list_testcases(config):
@@ -45,6 +45,8 @@ def list_testcases(config):
     input_list = list_matched_files(files, input_format_re)
     expect_list = list_matched_files(files, expect_format_re)
 
+    # sort input_list by index
+    input_list = sorted(input_list, key=lambda file: file.index)
     testcases = build_testcases(input_list, expect_list)
 
     file_format_re = '(' + variable.solve_string(config, input_format) + ')'
