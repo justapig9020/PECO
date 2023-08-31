@@ -24,6 +24,11 @@ class Test(unittest.TestCase):
                 self.assertNotEqual(result, None, result)
             else:
                 self.assertEqual(result, None, result)
+    
+    def test_compile_error(self):
+        report = judge('compile_error/judge.yaml')
+        self.assertEqual(len(report), 1)
+        self.assertTrue('Compile Error' in report)
 
 if __name__ == '__main__':
     unittest.main()
