@@ -6,6 +6,9 @@ from os import path
 import shutil
 
 def setup_env(config):
+    current_env = {
+        'pwd': os.getcwd(),
+    }
     build = config['build']['path'] if 'build' in config else 'build'
     root = config['root']
     build = path.join(root, build)
@@ -14,9 +17,10 @@ def setup_env(config):
         shutil.rmtree(build)
     os.mkdir(build)
     os.chdir(build)
+    return current_env
 
-def resolve_env(config):
-    os.chdir(config['root'])
+def resolve_env(env):
+    os.chdir(env['pwd'])
 
 def field_check(config):
     required_fields = ['judge', 'testcases']
@@ -61,10 +65,10 @@ def setup_config(config_file):
 
 def judge(config_file):
     config = setup_config(config_file)
-    setup_env(config)
+    origin_env = setup_env(config)
 
     result = run(config)   
 
-    resolve_env(config)
+    resolve_env(origin_env)
 
     return result
