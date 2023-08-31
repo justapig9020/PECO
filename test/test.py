@@ -7,8 +7,10 @@ import unittest
 
 class Test(unittest.TestCase):
     def test(self):
-        result = judge('all_pass/judge.yaml')
-        print(result)
+        report = judge('all_pass/judge.yaml')
+        self.assertEqual(len(report), 5)
+        for result in report.items():
+            self.assertEqual(result, None)
 
 if __name__ == '__main__':
     unittest.main()
