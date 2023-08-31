@@ -9,8 +9,10 @@ class Test(unittest.TestCase):
     def test(self):
         report = judge('all_pass/judge.yaml')
         self.assertEqual(len(report), 5)
-        for result in report.items():
-            self.assertEqual(result, None)
+        # Traverse the value of report
+        # Assert that all values are None
+        for result in report.values():
+            self.assertEqual(result, None, result)
 
 if __name__ == '__main__':
     unittest.main()

@@ -2,13 +2,14 @@ import yaml
 import testcase
 from execute import execute_commands
 import os
+from os import path
 import shutil
 
 def setup_env(config):
     build = config['build']['path'] if 'build' in config else 'build'
     root = config['root']
-    build = f'{root}/{build}'
-    if (os.path.exists(build)):
+    build = path.join(root, build)
+    if (path.exists(build)):
         # Remove all files in the build directory
         shutil.rmtree(build)
     os.mkdir(build)
@@ -51,15 +52,15 @@ def run(config):
             test_result[id] = log
     return test_result
 
-def setup_config(config):
-    with open(config, 'r') as f:
+def setup_config(config_file):
+    with open(config_file, 'r') as f:
         config = yaml.safe_load(f)
     field_check(config)
-    config['root'] = os.getcwd()
+    config['root'] = path.join(os.getcwd(), os.path.dirname(config_file))
     return config
 
-def judge(config):
-    config = setup_config(config)
+def judge(config_file):
+    config = setup_config(config_file)
     setup_env(config)
 
     result = run(config)   
