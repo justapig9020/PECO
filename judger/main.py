@@ -8,11 +8,11 @@ if __name__ == '__main__':
     # the argument "config", or short in "c", is the path of the config file, the config file is a yaml file
     parser.add_argument('-c', '--config', help='the path of the config file', required=True, type=str)
 
-    # the argument "text-only", or short in "t", indicates not to colorize the output. The argument is default to False
-    parser.add_argument('-t', '--text-only', help='do not colorize the output', default=False, action='store_true')
+    # the argument "quiet", or short in "q", is a flag, if it is set, the report will not contain the log of the commands and without colors
+    parser.add_argument('-q', '--quiet', help='quiet mode, do not print the log of the commands', action='store_true', default=False)
 
     args = parser.parse_args()
 
     results = judge(args.config)
 
-    print(report(results, not args.text_only))
+    print(report(results, verbose = not args.quiet))
