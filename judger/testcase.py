@@ -18,6 +18,7 @@ class ExpectMiss(Exception):
 
 def expect_file(input_file, expect_hash):
     if input_file.index in expect_hash:
+        # FIXME: the function pop() is not efficient since it will modify the hash table
         return expect_hash.pop(input_file.index).name
     else:
         raise ExpectMiss(input_file.name)
