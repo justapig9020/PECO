@@ -1,2 +1,2 @@
 # PECO
-- Pairwise tEsting execution COpilation framework
+- Pairwise testing Execution COpilation framework
