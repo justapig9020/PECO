@@ -24,16 +24,24 @@ def expect_file(input_file, expect_hash):
         raise ExpectMiss(input_file.name)
 
 def build_testcases(input_list, expect_list):
-    expect_hash = {file.index: file for file in expect_list}
-
-    testcases = [(input.name, expect_file(input, expect_hash)) for input in input_list]
-
-    if len(expect_hash) != 0:
-        # pick one of the expect file
-        input_miss = list(expect_hash.values())[0]
-        raise InputMiss(input_miss.name)
-
+    testcases = [(input_list[i].name, expect_list[i].name) for i in range(len(input_list))]
     return testcases
+
+def check_no_missing_testcases(input_list, expect_list):
+    input_indices = set([f.index for f in input_list])
+    expect_indices = set([f.index for f in expect_list])
+
+    diff_indices = sorted(input_indices ^ expect_indices)
+
+    if len(diff_indices) != 0:
+        if diff_indices[0] in input_indices:
+            for f in input_list:
+                if f.index == diff_indices[0]:
+                    raise ExpectMiss(f.name)
+        elif diff_indices[0] in expect_indices:
+            for f in expect_list:
+                if f.index == diff_indices[0]:
+                    raise InputMiss(f.name)
 
 def list_testcases(config):
     path = config['root'] + '/' + variable.solve_string(config, config['testcases']['path'])
@@ -45,6 +53,7 @@ def list_testcases(config):
     files = list_files_recursively(path)
     input_list = list_matched_files(files, input_format_re)
     expect_list = list_matched_files(files, expect_format_re)
+    check_no_missing_testcases(input_list, expect_list)
 
     # sort input_list by index
     input_list = sorted(input_list, key=lambda file: file.index)
