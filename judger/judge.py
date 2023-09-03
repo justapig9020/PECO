@@ -61,8 +61,11 @@ def run(config):
     return test_result
 
 def setup_config(config_file):
-    with open(config_file, 'r') as f:
-        config = yaml.safe_load(f)
+    if path.isfile(config_file):
+        with open(config_file, 'r') as f:
+            config = yaml.safe_load(f)
+    else:
+        raise Exception(f'Config file {config_file} is unexisted')
     field_check(config)
     config['root'] = path.join(os.getcwd(), os.path.dirname(config_file))
     return config
