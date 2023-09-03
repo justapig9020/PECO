@@ -25,6 +25,18 @@ class Test(unittest.TestCase):
 
         self.assertEqual(os.getcwd(), pwd)
 
+    def test_all_pass_with_indirect_config(self):
+        pwd = os.getcwd()
+
+        results = judge('indirect_config/config/judge.yaml')
+        self.assertEqual(len(results), 5)
+        # Traverse the value of report
+        # Assert that all values are None
+        for result in results.values():
+            self.assertEqual(result, None, result)
+
+        self.assertEqual(os.getcwd(), pwd)
+
     def test_with_fail(self):
         pwd = os.getcwd()
 
