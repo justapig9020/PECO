@@ -36,9 +36,10 @@ def build_testcases(input_list, expect_list):
     return testcases
 
 def list_testcases(config):
-    path = config['root'] + '/' + variable.solve_string(config, config['testcases']['path'])
-    input_format = config['testcases']['format']['input']
-    expect_format = config['testcases']['format']['expect']
+    tasks = config['tasks']
+    path = config['root'] + '/' + variable.solve_string(config, tasks['path'])
+    input_format = tasks['format']['input']
+    expect_format = tasks['format']['expect']
     input_format_re = variable.solve_string(config, input_format, prefix='(', postfix=')')
     expect_format_re = variable.solve_string(config, expect_format, prefix='(', postfix=')')
 

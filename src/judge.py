@@ -27,7 +27,7 @@ def resolve_env(env):
     os.chdir(env['pwd'])
 
 def field_check(config):
-    required_fields = ['judge', 'testcases']
+    required_fields = ['process', 'tasks']
     reserved_fields = ['root', 'input', 'expect']
 
     for field in required_fields:
@@ -39,21 +39,21 @@ def field_check(config):
             raise Exception(f'Field {field} is reserved')
 
 def run(config):
-    # Compile
-    if 'compile' in config:
-        (log, result) = execute_commands(config, 'compile')
+    # Setup
+    if 'setup' in config:
+        (log, result) = execute_commands(config, 'setup')
         if not result:
             raise CompileError(log)
 
     # List test cases
     test_cases = testcase.list_testcases(config)
 
-    # Judge
+    # Process tasks
     test_result = {}
     for input, expect, id in test_cases:
         config['input'] = input
         config['expect'] = expect
-        (log, result) = execute_commands(config, 'judge')
+        (log, result) = execute_commands(config, 'process')
         if result:
             test_result[id] = None
         else:
