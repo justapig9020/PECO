@@ -46,7 +46,7 @@ class Test(unittest.TestCase):
             judge('compile_error/judge.yaml')
 
     def test_missing_input(self):
-        from testcase import InputMiss
+        from task import InputMiss
         with self.assertRaises(InputMiss) as raised:
             judge('missing_input/judge.yaml')
         expect = re.compile("Input file for .*missing_input/testcases/output_1.txt is missing")
@@ -54,7 +54,7 @@ class Test(unittest.TestCase):
         self.assertIsNotNone(expect.match(message), message)
 
     def test_missing_expect(self):
-        from testcase import ExpectMiss
+        from task import ExpectMiss
         with self.assertRaises(ExpectMiss) as raised:
             judge('missing_expect/judge.yaml')
         expect = re.compile("Expect file for .*missing_expect/testcases/input_1.txt is missing")

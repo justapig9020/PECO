@@ -1,6 +1,7 @@
 import variable
 import os
 import re
+# FIXME: remove unused import
 import itertools
 
 class IndexedFile:
@@ -23,7 +24,7 @@ def expect_file(input_file, expect_hash):
     else:
         raise ExpectMiss(input_file.name)
 
-def build_testcases(input_list, expect_list):
+def build_tasks(input_list, expect_list):
     expect_hash = {file.index: file for file in expect_list}
 
     testcases = [(input.name, expect_file(input, expect_hash)) for input in input_list]
@@ -35,7 +36,7 @@ def build_testcases(input_list, expect_list):
 
     return testcases
 
-def list_testcases(config):
+def list_tasks(config):
     tasks = config['tasks']
     path = config['root'] + '/' + variable.solve_string(config, tasks['path'])
     input_format = tasks['format']['input']
@@ -49,12 +50,12 @@ def list_testcases(config):
 
     # sort input_list by index
     input_list = sorted(input_list, key=lambda file: file.index)
-    testcases = build_testcases(input_list, expect_list)
+    tasks = build_tasks(input_list, expect_list)
 
     file_format_re = '(' + variable.solve_string(config, input_format) + ')'
     file_name = re.compile(file_format_re)
-    testcases = [(input, expect, file_name.findall(input)[0]) for input, expect in testcases]
-    return testcases
+    tasks = [(input, expect, file_name.findall(input)[0]) for input, expect in tasks]
+    return tasks
 
 def list_files_recursively(path):
     result = []

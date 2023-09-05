@@ -1,5 +1,5 @@
 import yaml
-import testcase
+import task
 from execute import execute_commands
 import os
 from os import path
@@ -46,11 +46,11 @@ def run(config):
             raise CompileError(log)
 
     # List test cases
-    test_cases = testcase.list_testcases(config)
+    tasks = task.list_tasks(config)
 
     # Process tasks
     test_result = {}
-    for input, expect, id in test_cases:
+    for input, expect, id in tasks:
         config['input'] = input
         config['expect'] = expect
         (log, result) = execute_commands(config, 'process')
