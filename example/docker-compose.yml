@@ -5,4 +5,5 @@ services:
       dockerfile: dockerfile
     container_name: peco
     volumes:
-      - ./:/root/project
+      - ./code:/root/project/code
+      - ./testcases:/root/project/testcases
