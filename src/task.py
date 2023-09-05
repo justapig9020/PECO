@@ -1,8 +1,6 @@
 import variable
 import os
 import re
-# FIXME: remove unused import
-import itertools
 
 class IndexedFile:
     def __init__(self, index, name):
