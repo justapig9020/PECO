@@ -1,5 +1,5 @@
 import argparse
-from judge import judge
+from process import process_tasks
 from report import report
 
 if __name__ == '__main__':
@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    results = judge(args.config)
+    results = process_tasks(args.config)
 
     if args.dict:
         print(results)

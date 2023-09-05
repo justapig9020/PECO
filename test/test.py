@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
 
-from judge import judge
+from process import process_tasks
 import unittest
 import re
 
@@ -16,7 +16,7 @@ class Test(unittest.TestCase):
     def test_all_pass(self):
         pwd = os.getcwd()
 
-        results = judge('all_pass/judge.yaml')
+        results = process_tasks('all_pass/judge.yaml')
         self.assertEqual(len(results), 5)
         # Traverse the value of report
         # Assert that all values are None
@@ -28,7 +28,7 @@ class Test(unittest.TestCase):
     def test_with_fail(self):
         pwd = os.getcwd()
 
-        results = judge('with_fail/judge.yaml')
+        results = process_tasks('with_fail/judge.yaml')
         self.assertEqual(len(results), 5)
         # Traverse the value of report
         # Assert that all values are None except the "input_5"
@@ -41,14 +41,14 @@ class Test(unittest.TestCase):
         self.assertEqual(os.getcwd(), pwd)
 
     def test_compile_error(self):
-        from judge import CompileError
+        from process import CompileError
         with self.assertRaises(CompileError):
-            judge('compile_error/judge.yaml')
+            process_tasks('compile_error/judge.yaml')
 
     def test_missing_input(self):
         from task import InputMiss
         with self.assertRaises(InputMiss) as raised:
-            judge('missing_input/judge.yaml')
+            process_tasks('missing_input/judge.yaml')
         expect = re.compile("Input file for .*missing_input/testcases/output_1.txt is missing")
         message = f'{raised.exception}'
         self.assertIsNotNone(expect.match(message), message)
@@ -56,7 +56,7 @@ class Test(unittest.TestCase):
     def test_missing_expect(self):
         from task import ExpectMiss
         with self.assertRaises(ExpectMiss) as raised:
-            judge('missing_expect/judge.yaml')
+            process_tasks('missing_expect/judge.yaml')
         expect = re.compile("Expect file for .*missing_expect/testcases/input_1.txt is missing")
         message = f'{raised.exception}'
         self.assertIsNotNone(expect.match(message), message)

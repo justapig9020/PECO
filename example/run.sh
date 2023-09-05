@@ -1,2 +1,2 @@
 #!/bin/bash
-python3 ../judger/main.py -c judge.yaml
+python3 ../src/main.py -c judge.yaml

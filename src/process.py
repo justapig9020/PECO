@@ -67,7 +67,8 @@ def setup_config(config_file):
     config['root'] = path.join(os.getcwd(), os.path.dirname(config_file))
     return config
 
-def judge(config_file):
+def process_tasks(config_file):
+    # TODO: Wrap the environment setup and teardown by a context manager
     config = setup_config(config_file)
     origin_env = setup_env(config)
 
