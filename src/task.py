@@ -1,7 +1,6 @@
 import variable
 import os
 import re
-import itertools
 
 class IndexedFile:
     def __init__(self, index, name):
@@ -23,22 +22,23 @@ def expect_file(input_file, expect_hash):
     else:
         raise ExpectMiss(input_file.name)
 
-def build_testcases(input_list, expect_list):
+def build_tasks(input_list, expect_list):
     expect_hash = {file.index: file for file in expect_list}
 
-    testcases = [(input.name, expect_file(input, expect_hash)) for input in input_list]
+    tasks = [(input.name, expect_file(input, expect_hash)) for input in input_list]
 
     if len(expect_hash) != 0:
         # pick one of the expect file
         input_miss = list(expect_hash.values())[0]
         raise InputMiss(input_miss.name)
 
-    return testcases
+    return tasks
 
-def list_testcases(config):
-    path = config['root'] + '/' + variable.solve_string(config, config['testcases']['path'])
-    input_format = config['testcases']['format']['input']
-    expect_format = config['testcases']['format']['expect']
+def list_tasks(config):
+    tasks = config['tasks']
+    path = config['root'] + '/' + variable.solve_string(config, tasks['path'])
+    input_format = tasks['format']['input']
+    expect_format = tasks['format']['expect']
     input_format_re = variable.solve_string(config, input_format, prefix='(', postfix=')')
     expect_format_re = variable.solve_string(config, expect_format, prefix='(', postfix=')')
 
@@ -48,12 +48,12 @@ def list_testcases(config):
 
     # sort input_list by index
     input_list = sorted(input_list, key=lambda file: file.index)
-    testcases = build_testcases(input_list, expect_list)
+    tasks = build_tasks(input_list, expect_list)
 
     file_format_re = '(' + variable.solve_string(config, input_format) + ')'
     file_name = re.compile(file_format_re)
-    testcases = [(input, expect, file_name.findall(input)[0]) for input, expect in testcases]
-    return testcases
+    tasks = [(input, expect, file_name.findall(input)[0]) for input, expect in tasks]
+    return tasks
 
 def list_files_recursively(path):
     result = []

@@ -9,10 +9,10 @@ WORKDIR /root/project
 COPY judge.yaml /root/project/judge.yaml
 
 WORKDIR /root/peco
-RUN git fetch
-RUN git checkout docker-example
+RUN git fetch --all --tags
+RUN git checkout docker-example-v0.1.0
 RUN pip install -r requirements.txt
 
 WORKDIR /root/
 
-CMD ["python3", "peco/judger/main.py", "-c", "project/judge.yaml"]
+CMD ["python3", "peco/src/main.py", "-c", "project/judge.yaml"]
