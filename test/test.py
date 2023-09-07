@@ -41,8 +41,8 @@ class Test(unittest.TestCase):
         self.assertEqual(os.getcwd(), pwd)
 
     def test_compile_error(self):
-        from process import CompileError
-        with self.assertRaises(CompileError):
+        from process import SetupFailed
+        with self.assertRaises(SetupFailed):
             process_tasks('compile_error/judge.yaml')
 
     def test_missing_input(self):

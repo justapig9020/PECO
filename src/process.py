@@ -5,7 +5,7 @@ import os
 from os import path
 import shutil
 
-class CompileError(Exception):
+class SetupFailed(Exception):
     def __init__(self, log):
         super().__init__(f'{log}')
 
@@ -43,7 +43,7 @@ def run(config):
     if 'setup' in config:
         (log, result) = execute_commands(config, 'setup')
         if not result:
-            raise CompileError(log)
+            raise SetupFailed(log)
 
     # List test cases
     tasks = task.list_tasks(config)
