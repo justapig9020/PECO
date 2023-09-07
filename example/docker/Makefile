@@ -1,5 +1,5 @@
 run:
 	@docker-compose up
 
-down:
+clean:
 	@docker-compose down --rmi local
