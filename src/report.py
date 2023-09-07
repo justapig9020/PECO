@@ -27,11 +27,11 @@ def report(results, verbose=True):
     # The Failed is red
 
     report = ''
-    for testcase, result in results.items():
+    for task, result in results.items():
         if result is None:
-            report += f'{testcase}: {shader("Passed", PASSED, verbose)}\n'
+            report += f'{task}: {shader("Passed", PASSED, verbose)}\n'
         else:
-            report += f'{testcase}: {shader("Failed", FAILED, verbose)}\n'
+            report += f'{task}: {shader("Failed", FAILED, verbose)}\n'
             if not verbose:
                 continue
             length = max([len(command) for log in result for command in log.keys()]) + 2

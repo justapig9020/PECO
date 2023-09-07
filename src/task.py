@@ -25,14 +25,14 @@ def expect_file(input_file, expect_hash):
 def build_tasks(input_list, expect_list):
     expect_hash = {file.index: file for file in expect_list}
 
-    testcases = [(input.name, expect_file(input, expect_hash)) for input in input_list]
+    tasks = [(input.name, expect_file(input, expect_hash)) for input in input_list]
 
     if len(expect_hash) != 0:
         # pick one of the expect file
         input_miss = list(expect_hash.values())[0]
         raise InputMiss(input_miss.name)
 
-    return testcases
+    return tasks
 
 def list_tasks(config):
     tasks = config['tasks']
