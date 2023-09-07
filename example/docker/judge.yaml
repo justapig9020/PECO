@@ -14,17 +14,17 @@ build:
 
 # Test case config
 # The judger will find all test cases in the directory
-testcases:
+tasks:
   path: testcases
   format:
-    input: input_<testcases::format::index>.txt
-    expect: output_<testcases::format::index>.txt
+    input: input_<tasks::format::index>.txt
+    expect: output_<tasks::format::index>.txt
     index: "[0-9]+"
 
 # Compile config
 # The judger does compilation before judging
 # If the compilation fails, the judger will return a compile error
-compile:
+setup:
   timeout: 60
   commands:
     - gcc -o main.o -c <source::path>/main.c -I<supplied::path>
@@ -34,7 +34,7 @@ compile:
 # Judge config
 # For each test case, the judger does judging after execution0
 # If the judging fails, the test case fails
-judge:
+process:
   timeout: 60
   commands:
     - cat <input> | ./main | tee output
