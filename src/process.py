@@ -1,6 +1,6 @@
-import yaml
 import task
 from execute import execute_commands
+from config import Config
 import os
 from os import path
 import shutil
@@ -27,18 +27,6 @@ class SetupFailed(Exception):
     def __init__(self, log):
         super().__init__(f'{log}')
 
-def field_check(config):
-    required_fields = ['process', 'tasks']
-    reserved_fields = ['root', 'input', 'expect']
-
-    for field in required_fields:
-        if field not in config:
-            raise Exception(f'Field {field} is required in the config file')
-
-    for field in reserved_fields:
-        if field in config:
-            raise Exception(f'Field {field} is reserved')
-
 def run(config):
     # Setup
     if 'setup' in config:
@@ -61,21 +49,12 @@ def run(config):
             test_result[id] = log
     return test_result
 
-def setup_config(config_file):
-    with open(config_file, 'r') as f:
-        config = yaml.safe_load(f)
-    field_check(config)
-    config['root'] = path.join(os.getcwd(), os.path.dirname(config_file))
-    return config
-
 def process_tasks(config_file):
-    config = setup_config(config_file)
-    build = config['build']['path'] if 'build' in config else 'build'
-    root = config['root']
-    build = path.join(root, build)
+    # Create a pre-checked configuration which can be used as a dict type
+    config = Config(config_file)
 
     # Wrap the environment setup and teardown by a context manager
-    with WorkingDirectory(build):
+    with WorkingDirectory(config['build']['path']):
         results = run(config)
 
     return results
