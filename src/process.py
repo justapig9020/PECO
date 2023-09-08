@@ -5,26 +5,27 @@ import os
 from os import path
 import shutil
 
+class WorkingDirectory(object):
+    def __init__(self, working_path):
+        self.working_path = working_path
+
+        # Remove all files in the working directory
+        if (path.exists(working_path)):
+            shutil.rmtree(working_path)
+
+        # Create clean working directory
+        os.mkdir(working_path)
+
+    def __enter__(self):
+        self.original_path = os.getcwd()
+        os.chdir(self.working_path)
+
+    def __exit__(self, type, value, traceback):
+        os.chdir(self.original_path)
+
 class SetupFailed(Exception):
     def __init__(self, log):
         super().__init__(f'{log}')
-
-def setup_env(config):
-    current_env = {
-        'pwd': os.getcwd(),
-    }
-    build = config['build']['path'] if 'build' in config else 'build'
-    root = config['root']
-    build = path.join(root, build)
-    if (path.exists(build)):
-        # Remove all files in the build directory
-        shutil.rmtree(build)
-    os.mkdir(build)
-    os.chdir(build)
-    return current_env
-
-def resolve_env(env):
-    os.chdir(env['pwd'])
 
 def field_check(config):
     required_fields = ['process', 'tasks']
@@ -68,12 +69,13 @@ def setup_config(config_file):
     return config
 
 def process_tasks(config_file):
-    # TODO: Wrap the environment setup and teardown by a context manager
     config = setup_config(config_file)
-    origin_env = setup_env(config)
+    build = config['build']['path'] if 'build' in config else 'build'
+    root = config['root']
+    build = path.join(root, build)
 
-    results = run(config)
-
-    resolve_env(origin_env)
+    # Wrap the environment setup and teardown by a context manager
+    with WorkingDirectory(build):
+        results = run(config)
 
     return results
