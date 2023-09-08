@@ -30,7 +30,7 @@ class Config():
                 raise Exception(f'Field {field} is required in the config file')
 
     def create_reserved_fields(self):
-        reserved_fields = ['root', 'input', 'expect']
+        reserved_fields = ['root']
         for field in reserved_fields:
             if field in self.config:
                 raise Exception(f'Field {field} is reserved')
