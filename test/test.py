@@ -33,7 +33,7 @@ class Test(unittest.TestCase):
         # Traverse the value of report
         # Assert that all values are None except the "input_5"
         for testcase, result in results.items():
-            if 'input_5' in testcase:
+            if '5' in testcase:
                 self.assertNotEqual(result, None, result)
             else:
                 self.assertEqual(result, None, result)
@@ -46,20 +46,20 @@ class Test(unittest.TestCase):
             process_tasks('compile_error/judge.yaml')
 
     def test_missing_input(self):
-        from task import InputMiss
-        with self.assertRaises(InputMiss) as raised:
+        from task import FileMiss
+        with self.assertRaises(FileMiss) as raised:
             process_tasks('missing_input/judge.yaml')
-        expect = re.compile("Input file for .*missing_input/testcases/output_1.txt is missing")
+        expect = "task.FileMiss: File in \"input\" type with index \"1\" is missing"
         message = f'{raised.exception}'
-        self.assertIsNotNone(expect.match(message), message)
+        self.assertIsNotNone(expect, message)
 
     def test_missing_expect(self):
-        from task import ExpectMiss
-        with self.assertRaises(ExpectMiss) as raised:
-            process_tasks('missing_expect/judge.yaml')
-        expect = re.compile("Expect file for .*missing_expect/testcases/input_1.txt is missing")
+        from task import FileMiss
+        with self.assertRaises(FileMiss) as raised:
+            process_tasks('missing_input/judge.yaml')
+        expect = "task.FileMiss: File in \"expect\" type with index \"1\" is missing"
         message = f'{raised.exception}'
-        self.assertIsNotNone(expect.match(message), message)
+        self.assertIsNotNone(expect, message)
 
 if __name__ == '__main__':
     unittest.main()
