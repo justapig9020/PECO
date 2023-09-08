@@ -2,7 +2,6 @@ import task
 from execute import execute_commands
 from config import Config
 import os
-from os import path
 import shutil
 
 class WorkingDirectory(object):
@@ -10,7 +9,7 @@ class WorkingDirectory(object):
         self.working_path = working_path
 
         # Remove all files in the working directory
-        if (path.exists(working_path)):
+        if (os.path.exists(working_path)):
             shutil.rmtree(working_path)
 
         # Create clean working directory

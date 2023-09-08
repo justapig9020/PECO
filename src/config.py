@@ -1,12 +1,11 @@
 import os
-from os import path
 import yaml
 
 class Config():
     def __init__(self, config_file):
         self.config_file = config_file
 
-        if path.isfile(config_file):
+        if os.path.isfile(config_file):
             with open(config_file, 'r') as f:
                 self.config = yaml.safe_load(f)
         else:
@@ -36,7 +35,7 @@ class Config():
             if field in self.config:
                 raise Exception(f'Field {field} is reserved')
 
-        self.config['root'] = path.join(os.getcwd(), os.path.dirname(self.config_file))
+        self.config['root'] = os.path.join(os.getcwd(), os.path.dirname(self.config_file))
 
         # Make build path an absolute path
         if 'build' in self.config and 'path' in self.config['build']:
@@ -44,4 +43,4 @@ class Config():
         else:
             self.config['build'] = {}
             build_path = 'build'
-        self.config['build']['path'] = path.join(self.config['root'], build_path)
+        self.config['build']['path'] = os.path.join(self.config['root'], build_path)
