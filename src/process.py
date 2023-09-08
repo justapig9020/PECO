@@ -35,18 +35,18 @@ def run(config):
             raise SetupFailed(log)
 
     # List test cases
-    tasks = task.list_tasks(config)
+    (tasks, indices) = task.list_tasks(config)
 
     # Process tasks
     test_result = {}
-    for input, expect, id in tasks:
-        config['input'] = input
-        config['expect'] = expect
+    for i in range(len(indices)):
+        for key in tasks.keys():
+            config[key] = tasks[key][i]
         (log, result) = execute_commands(config, 'process')
         if result:
-            test_result[id] = None
+            test_result[indices[i]] = None
         else:
-            test_result[id] = log
+            test_result[indices[i]] = log
     return test_result
 
 def process_tasks(config_file):
@@ -55,6 +55,6 @@ def process_tasks(config_file):
 
     # Wrap the environment setup and teardown by a context manager
     with WorkingDirectory(config['build']['path']):
-        results = run(config)
+        return run(config)
 
-    return results
+    return {}
