@@ -1,8 +1,9 @@
 import task
 from execute import execute_commands
-from config import Config
 import os
 import shutil
+
+from config import Config
 
 class WorkingDirectory(object):
     def __init__(self, working_path):

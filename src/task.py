@@ -1,6 +1,7 @@
-import variable
 import os
 import re
+
+import variable
 
 class IndexedFile:
     def __init__(self, index, name):
