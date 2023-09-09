@@ -23,7 +23,7 @@ def build_tasks(files_info):
     for key in keys:
         files[key] = [file.name for file in files_info[key]]
     if len(keys) > 0:
-        files["index"] = [file.index for file in files_info[keys[0]]]
+        files['index'] = [file.index for file in files_info[keys[0]]]
 
     return files
 
