@@ -29,10 +29,8 @@ def build_tasks(files_info):
 
 def check_tasks(files_info):
     keys = list(files_info.keys())
-    files_mx_cnt = 0
+    files_mx_cnt = max([len(files_info[key]) for key in keys])
 
-    for key in keys:
-        files_mx_cnt = max(files_mx_cnt, len(files_info[key]))
     for i in range(files_mx_cnt):
         for j in range(1, len(keys)):
             if files_info[keys[j - 1]][i].index < files_info[keys[j]][i].index:
