@@ -19,14 +19,13 @@ class FileMiss(Exception):
 def build_tasks(files_info):
     keys = list(files_info.keys())
     files = {}
-    indices = []
 
     for key in keys:
         files[key] = [file.name for file in files_info[key]]
     if len(keys) > 0:
-        indices = [file.index for file in files_info[keys[0]]]
+        files["index"] = [file.index for file in files_info[keys[0]]]
 
-    return (files, indices)
+    return files
 
 def check_tasks(files_info):
     keys = list(files_info.keys())

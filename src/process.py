@@ -35,18 +35,18 @@ def run(config):
             raise SetupFailed(log)
 
     # List test cases
-    (tasks, indices) = task.list_tasks(config)
+    tasks = task.list_tasks(config)
 
     # Process tasks
     test_result = {}
-    for i in range(len(indices)):
+    for i in range(len(tasks['index'])):
         for key in tasks.keys():
             config[key] = tasks[key][i]
         (log, result) = execute_commands(config, 'process')
         if result:
-            test_result[indices[i]] = None
+            test_result[config['index']] = None
         else:
-            test_result[indices[i]] = log
+            test_result[config['index']] = log
     return test_result
 
 def process_tasks(config_file):
