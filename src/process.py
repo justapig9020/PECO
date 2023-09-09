@@ -56,5 +56,3 @@ def process_tasks(config_file):
     # Wrap the environment setup and teardown by a context manager
     with WorkingDirectory(config['build']['path']):
         return run(config)
-
-    return {}
