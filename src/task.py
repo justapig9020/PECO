@@ -1,5 +1,6 @@
 import os
 import re
+import more_itertools
 
 import variable
 
@@ -31,12 +32,13 @@ def check_tasks(files_info):
     keys = list(files_info.keys())
     files_mx_cnt = max([len(files_info[key]) for key in keys])
 
+    # Check that every type of file has the same index
     for i in range(files_mx_cnt):
-        for j in range(1, len(keys)):
-            if files_info[keys[j - 1]][i].index < files_info[keys[j]][i].index:
-                raise FileMiss(keys[j], files_info[keys[j - 1]][i].index)
-            elif files_info[keys[j - 1]][i].index > files_info[keys[j]][i].index:
-                raise FileMiss(keys[j - 1], files_info[keys[j]][i].index)
+        for (pre, cur) in list(more_itertools.windowed(keys, 2)):
+            if files_info[pre][i].index < files_info[cur][i].index:
+                raise FileMiss(keys[j], files_info[pre][i].index)
+            elif files_info[pre][i].index > files_info[cur][i].index:
+                raise FileMiss(pre, files_info[cur][i].index)
 
 def list_tasks(config):
     tasks = config['tasks']
