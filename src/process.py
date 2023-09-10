@@ -1,42 +1,31 @@
-import yaml
+import os
+import shutil
+
 import task
 from execute import execute_commands
-import os
-from os import path
-import shutil
+from config import Config
+
+class WorkingDirectory(object):
+    def __init__(self, working_path):
+        self.working_path = working_path
+
+        # Remove all files in the working directory
+        if (os.path.exists(working_path)):
+            shutil.rmtree(working_path)
+
+        # Create clean working directory
+        os.mkdir(working_path)
+
+    def __enter__(self):
+        self.original_path = os.getcwd()
+        os.chdir(self.working_path)
+
+    def __exit__(self, type, value, traceback):
+        os.chdir(self.original_path)
 
 class SetupFailed(Exception):
     def __init__(self, log):
         super().__init__(f'{log}')
-
-def setup_env(config):
-    current_env = {
-        'pwd': os.getcwd(),
-    }
-    build = config['build']['path'] if 'build' in config else 'build'
-    root = config['root']
-    build = path.join(root, build)
-    if (path.exists(build)):
-        # Remove all files in the build directory
-        shutil.rmtree(build)
-    os.mkdir(build)
-    os.chdir(build)
-    return current_env
-
-def resolve_env(env):
-    os.chdir(env['pwd'])
-
-def field_check(config):
-    required_fields = ['process', 'tasks']
-    reserved_fields = ['root', 'input', 'expect']
-
-    for field in required_fields:
-        if field not in config:
-            raise Exception(f'Field {field} is required in the config file')
-
-    for field in reserved_fields:
-        if field in config:
-            raise Exception(f'Field {field} is reserved')
 
 def run(config):
     # Setup
@@ -50,30 +39,17 @@ def run(config):
 
     # Process tasks
     test_result = {}
-    for input, expect, id in tasks:
-        config['input'] = input
-        config['expect'] = expect
+    for (index, files) in tasks:
+        for file_type, file_path in files.items():
+            config[file_type] = file_path
         (log, result) = execute_commands(config, 'process')
-        if result:
-            test_result[id] = None
-        else:
-            test_result[id] = log
+        test_result[index] = None if result else log
     return test_result
 
-def setup_config(config_file):
-    with open(config_file, 'r') as f:
-        config = yaml.safe_load(f)
-    field_check(config)
-    config['root'] = path.join(os.getcwd(), os.path.dirname(config_file))
-    return config
-
 def process_tasks(config_file):
-    # TODO: Wrap the environment setup and teardown by a context manager
-    config = setup_config(config_file)
-    origin_env = setup_env(config)
+    # Create a pre-checked configuration which can be used as a dict type
+    config = Config(config_file)
 
-    results = run(config)
-
-    resolve_env(origin_env)
-
-    return results
+    # Wrap the environment setup and teardown by a context manager
+    with WorkingDirectory(config['build']['path']):
+        return run(config)

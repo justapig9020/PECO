@@ -1,4 +1,5 @@
 import subprocess
+
 import variable
 
 def for_all_commands(result):
