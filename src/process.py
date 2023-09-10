@@ -39,14 +39,11 @@ def run(config):
 
     # Process tasks
     test_result = {}
-    for i in range(len(tasks['index'])):
-        for key in tasks.keys():
-            config[key] = tasks[key][i]
+    for (index, files) in tasks:
+        for file_type, file_path in files.items():
+            config[file_type] = file_path
         (log, result) = execute_commands(config, 'process')
-        if result:
-            test_result[config['index']] = None
-        else:
-            test_result[config['index']] = log
+        test_result[index] = None if result else log
     return test_result
 
 def process_tasks(config_file):
