@@ -49,17 +49,17 @@ class Test(unittest.TestCase):
         from task import FileMiss
         with self.assertRaises(FileMiss) as raised:
             process_tasks('missing_input/judge.yaml')
-        expect = "task.FileMiss: File in \"input\" type with index \"1\" is missing"
-        message = f'{raised.exception}'
-        self.assertIsNotNone(expect, message)
+        expect_message = 'File in "input" type with index "1" is missing'
+        exception_message = f'{raised.exception}'
+        self.assertEqual(expect_message, exception_message)
 
     def test_missing_expect(self):
         from task import FileMiss
         with self.assertRaises(FileMiss) as raised:
-            process_tasks('missing_input/judge.yaml')
-        expect = "task.FileMiss: File in \"expect\" type with index \"1\" is missing"
-        message = f'{raised.exception}'
-        self.assertIsNotNone(expect, message)
+            process_tasks('missing_expect/judge.yaml')
+        expect_message = 'File in "expect" type with index "1" is missing'
+        exception_message = f'{raised.exception}'
+        self.assertEqual(expect_message, exception_message)
 
 if __name__ == '__main__':
     unittest.main()

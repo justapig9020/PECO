@@ -35,7 +35,7 @@ def check_tasks(files_info):
     for i in range(files_mx_cnt):
         for (pre, cur) in list(more_itertools.windowed(keys, 2)):
             if files_info[pre][i].index < files_info[cur][i].index:
-                raise FileMiss(keys[j], files_info[pre][i].index)
+                raise FileMiss(cur, files_info[pre][i].index)
             elif files_info[pre][i].index > files_info[cur][i].index:
                 raise FileMiss(pre, files_info[cur][i].index)
 
