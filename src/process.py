@@ -1,8 +1,8 @@
-import task
-from execute import execute_commands
 import os
 import shutil
 
+import task
+from execute import execute_commands
 from config import Config
 
 class WorkingDirectory(object):
