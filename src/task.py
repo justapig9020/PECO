@@ -28,6 +28,7 @@ def build_tasks(files_info):
 
 def check_tasks(files_info):
     keys = list(files_info.keys())
+
     files_mx_cnt = max([len(files_info[key]) for key in keys])
 
     # Check that every type of file has the same index
@@ -58,6 +59,9 @@ def list_tasks(config):
 def list_files_recursively(path):
     result = []
     for root, dirs, files in os.walk(path):
+        for dir in dirs:
+            dir_path = os.path.join(root, dir)
+            result.append(dir_path)
         for file in files:
             file_path = os.path.join(root, file)
             result.append(file_path)
@@ -68,4 +72,5 @@ def list_matched_files(files, format):
     format = re.compile(format)
     files = [file for file in files]
     indexed_files = [(file, format.findall(file)) for file in files]
+    # TODO: Maybe we should raise an error if there are multiple matches
     return [IndexedFile(index[0], file) for file, index in indexed_files if index != []]
