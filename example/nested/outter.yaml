@@ -33,5 +33,5 @@ process:
     - rm -rf *
     - cp -rf <student>/* .
     - cp -rf <private::path>/* .
-    - docker-compose up
+    - docker-compose up --exit-code-from peco
     - docker-compose down --rmi local
