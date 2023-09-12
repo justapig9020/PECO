@@ -49,7 +49,7 @@ def list_tasks(config):
     for format_type in tasks_format:
         if format_type == 'index':
             continue
-        format_re = variable.solve_string(config, tasks_format[format_type], prefix='(', postfix=')')
+        format_re = variable.solve_string(config, tasks_format[format_type], prefix='(', postfix=')') + '$'
         format_list = list_matched_files(files_path, format_re)
         files_info[format_type] = sorted(format_list)
 
