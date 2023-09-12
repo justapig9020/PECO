@@ -30,6 +30,7 @@ tasks:
 process:
   timeout: 60
   commands:
+    - rm -rf *
     - cp -rf <student>/* .
     - cp -rf <private::path>/* .
     - docker-compose up
