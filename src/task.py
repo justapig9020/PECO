@@ -29,6 +29,10 @@ def build_tasks(files_info):
 def check_tasks(files_info):
     keys = list(files_info.keys())
 
+    # If there is only one type of file, we don't need to check
+    if len(keys) < 2:
+        return
+
     files_mx_cnt = max([len(files_info[key]) for key in keys])
 
     # Check that every type of file has the same index
