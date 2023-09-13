@@ -2,7 +2,7 @@
 # ├── Makefile
 # ├── outter.yaml
 # ├── private
-# │   ├── inner.yaml
+# │   ├── judge.yaml
 # │   ├── supplied
 # │   │   └── <supplied code>
 # │   └── testcases
