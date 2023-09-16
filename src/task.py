@@ -74,7 +74,6 @@ def list_files_recursively(path):
 def list_matched_files(files, format):
     # Filter the files
     format = re.compile(format)
-    files = [file for file in files]
     indexed_files = [(file, format.findall(file)) for file in files]
     # TODO: Maybe we should raise an error if there are multiple matches
     return [IndexedFile(index[0], file) for file, index in indexed_files if index != []]
