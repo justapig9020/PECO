@@ -53,7 +53,11 @@ def list_tasks(config):
     for format_type in tasks_format:
         if format_type == 'index':
             continue
-        format_re = variable.solve_string(config, tasks_format[format_type], prefix='(', postfix=')') + '$'
+        format_re = variable.solve_string(config, tasks_format[format_type], prefix='(', postfix=')')
+        # In some cases, the format is representing a directory rather than a file
+        # Add the '$' to the end of the format to make sure there is no postfix after the format
+        # Otherwise, the format might mathes the files within the directory
+        format_re = f'{format_re}$'
         format_list = list_matched_files(files_path, format_re)
         files_info[format_type] = sorted(format_list)
 
@@ -75,5 +79,5 @@ def list_matched_files(files, format):
     # Filter the files
     format = re.compile(format)
     indexed_files = [(file, format.findall(file)) for file in files]
-    # TODO: Maybe we should raise an error if there are multiple matches
+    # Since we have '$' at the end of the format, the format should be unique. So the matched index should be either [] or [index]
     return [IndexedFile(index[0], file) for file, index in indexed_files if index != []]
